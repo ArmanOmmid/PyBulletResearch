@@ -21,8 +21,11 @@ jointid = 4
 jlower = p.getJointInfo(targid, jointid)[8] # Create joints for Robotic Arm
 jupper = p.getJointInfo(targid, jointid)[9]
 
-# for step in range(300):
-#     focus_position, focus_orientation = p.getBasePositionAndOrientation(targid)
-#     p.resetDebugVisualizerCamera(cameraDistance=3, CameraYaw=0, cameraPitch=-40, cameraTargetPosition=focus_position) # Follow the robotic arm 
-#     p.stepSimulation()
-#     time.sleep(0.1)
+for step in range(500):
+    joint_two_targ = np.random.uniform(jlower, jupper)
+    joint_four_targ = np.random.uniform(jlower, jupper)
+    p.setJointMotorControlArray(targid, [2, 4], p.POSITION_CONTROL, targetPositions = [joint_two_targ, joint_four_targ])
+    focus_position, focus_orientation = p.getBasePositionAndOrientation(targid)
+    p.resetDebugVisualizerCamera(cameraDistance=3, cameraYaw=0, cameraPitch=-40, cameraTargetPosition=focus_position) # Follow the robotic arm 
+    p.stepSimulation()
+    time.sleep(1./240.)
