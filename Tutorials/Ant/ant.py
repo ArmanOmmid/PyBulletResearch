@@ -19,14 +19,14 @@ parser.add_argument('epochs', type=str,
                     help='Epochs')
 parser.add_argument('iterations', type=str,
                     help='Iterations')
-parser.add_argument('--render', type=str, action='store_true',
+parser.add_argument('--render', action='store_true',
                     help='Render')
 
 def main(args):
 
     type = args.type
-    train = type in ['train' 'both']
-    test = type in ['test' 'both']
+    train = type in ['train', 'both']
+    test = type in ['test', 'both']
 
     epochs = args.epochs
     iterations = args.iterations
