@@ -15,9 +15,9 @@ from stable_baselines3.common.evaluation import evaluate_policy
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('type', type=str,
                     help='Train or Test')
-parser.add_argument('epochs', type=str,
+parser.add_argument('epochs', type=int,
                     help='Epochs')
-parser.add_argument('iterations', type=str,
+parser.add_argument('iterations', type=int,
                     help='Iterations')
 parser.add_argument('--render', action='store_true',
                     help='Render')
