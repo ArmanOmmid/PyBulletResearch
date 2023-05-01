@@ -40,7 +40,7 @@ def main(args):
     model = PPO('MlpPolicy', env, learning_rate=0.0001, policy_kwargs=policy_kwargs, verbose=1)
 
     if load:
-        model.load("_weights/PPO_Ant_Load.zip")
+        model.load("_weights/PPO_Ant_Load")
 
     if render:
         env.render(mode="human")
