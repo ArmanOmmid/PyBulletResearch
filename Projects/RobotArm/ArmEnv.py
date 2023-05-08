@@ -7,18 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1nr-nG8NkRWmGwF5TPV011MJvWNMwLkJE
 """
 
-token = "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"
-# Force_Redownload = 1
-# try:
-#     if Force_Redownload: raise Exception("Force Redownload")
-#     import PyBulletResearch
-# except Exception as E:
-#     print("[INFO] Downloading Code from GitHub.")
-#     !rm -rf PyBulletResearch
-#     !git clone https://ArmanOmmid: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@github.com/ArmanOmmid/PyBulletResearch.git
-# finally:
-#     pass
-
 # !pip install pybullet
 
 import numpy as np
