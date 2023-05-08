@@ -4,3 +4,5 @@
 
 _weights
 _weights/*
+
+*__pycache__
