@@ -1,4 +1,4 @@
-import gym
+import gymnasium as gym 
 import numpy as np
 import math
 import pybullet as p
@@ -8,9 +8,11 @@ from simple_driving.resources.goal import Goal
 import matplotlib.pyplot as plt
 
 class SimpleDrivingEnv(gym.Env):
-    metadata = {'render.modes': ['human']}  
+    metadata = {'render.modes': ['human'], 'render_fps': 30}  
   
-    def __init__(self):
+    def __init__(self, mode='DIRECT'):
+        super().__init__()
+
         # Action space is in R^2 [0, -0.6], [1, 0.6] describing the throttle percentage and the steering agnles [-0.6, 0.6]
         """
         Action Space
@@ -40,7 +42,8 @@ class SimpleDrivingEnv(gym.Env):
 
         self.np_random, _ = gym.utils.seeding.np_random()
 
-        self.client = p.connect(p.DIRECT) # We use p.DIRECT as we want to run our environment as quickly as possible when training a policy and only render when render() is called.
+        mode = p.DIRECT if mode == 'DIRECT' else p.GUI if mode == 'GUI' else None
+        self.client = p.connect(mode) # We use p.DIRECT as we want to run our environment as quickly as possible when training a policy and only render when render() is called.
         # Reduce length of episodes for RL algorithms
         p.setTimeStep(1/30, self.client)
 
@@ -74,10 +77,13 @@ class SimpleDrivingEnv(gym.Env):
             self.done = True
             reward = 50
 
-        ob = np.array(car_ob + self.goal, dtype=np.float32)
-        return ob, reward, self.done, dict()
+        obs = np.array(car_ob + self.goal, dtype=np.float32)
+        truncated = False
+        info = dict()
 
-    def reset(self):
+        return obs, reward, self.done, truncated, info
+
+    def reset(self, seed=None, options=None):
         p.resetSimulation(self.client)
         p.setGravity(0, 0, -10)
         # Reload the plane and car
@@ -85,10 +91,10 @@ class SimpleDrivingEnv(gym.Env):
         self.car = Car(self.client)
 
         # Set the goal to a random target
-        x = (self.np_random.uniform(5, 9) if self.np_random.randint(2) else
-             self.np_random.uniform(-5, -9))
-        y = (self.np_random.uniform(5, 9) if self.np_random.randint(2) else
-             self.np_random.uniform(-5, -9))
+        x = (self.np_random.uniform(5, 9) if self.np_random.integers(2) else
+             self.np_random.uniform(-9, -5))
+        y = (self.np_random.uniform(5, 9) if self.np_random.integers(2) else
+             self.np_random.uniform(-9, -5))
         self.goal = (x, y)
         self.done = False
 
@@ -100,7 +106,10 @@ class SimpleDrivingEnv(gym.Env):
 
         self.prev_dist_to_goal = math.sqrt(((car_ob[0] - self.goal[0]) ** 2 +
                                            (car_ob[1] - self.goal[1]) ** 2))
-        return np.array(car_ob + self.goal, dtype=np.float32)
+        
+        obs = np.array(car_ob + self.goal, dtype=np.float32)
+        info = dict()
+        return obs, info
 
     def render(self, mode='human'):
         if self.rendered_img is None:
